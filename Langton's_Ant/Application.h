@@ -22,9 +22,14 @@ private:
 
 	State GetPixelState(const sf::Vector2u& pixel) const;
 
+	void AddAnt();
 	void Update();
 	void Render();
+
+	int random(int min, int max);
 private:
+	sf::Clock m_seed;
+	bool first = true;
 	sf::RenderWindow m_mainWindow;
 
 	sf::RectangleShape m_cells;

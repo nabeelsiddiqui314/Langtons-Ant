@@ -2,15 +2,12 @@
 #include "Ant.h"
 
 
-Ant::Ant(const sf::Vector2i& max) 
-	: m_position({ random(0, max.x), random(0, max.y) })
-    , m_direction((Direction)random(0, 3)) {
-	sf::Uint8 r = random(0, 254);
-	sf::Uint8 g = random(0, 254);
-	sf::Uint8 b = random(0, 254);
-	m_color = { r, g, b };
+Ant::Ant(const sf::Vector2i& pos, const sf::Color& color, int dir) 
+: m_position(pos)
+, m_color(color)
+, m_direction((Direction)dir) {
+	
 }
-
 
 void Ant::Turn(TurnDir dir) {
 	switch (m_direction) {
