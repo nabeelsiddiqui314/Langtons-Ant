@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "Ant.h"
+#include <vector>
 
 enum class State {
 	ON,
@@ -19,14 +20,17 @@ public:
 private:
 	inline void SetTexture();
 
+	State GetPixelState(const sf::Vector2u& pixel) const;
+
 	void Update();
 	void Render();
 private:
-	sf::Clock        m_deltaTime;
 	sf::RenderWindow m_mainWindow;
 
 	sf::RectangleShape m_cells;
 	sf::Texture        m_cellsTex;
 	sf::Image          m_pixelBuffer;
+
+	std::vector<Ant> m_ants;
 };
 

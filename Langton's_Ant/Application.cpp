@@ -10,6 +10,11 @@ Application::Application() {
 	m_cells.setTexture(&m_cellsTex);
 	m_cells.setPosition(0, 0);
 	m_cells.setSize(sf::Vector2f(1000, 650));
+
+	for (unsigned int i = 0; i < 10; i++) {
+		Ant* ant = new Ant({1000 - 10, 650 - 10});
+		m_ants.push_back(*ant);
+	}
 }
 
 inline void Application::SetTexture() {
@@ -17,8 +22,25 @@ inline void Application::SetTexture() {
 	m_cells.setTexture(&m_cellsTex);
 }
 
+State Application::GetPixelState(const sf::Vector2u& pixel) const {
+	if (m_pixelBuffer.getPixel(pixel.x, pixel.y) == sf::Color::White)
+		return State::OFF;
+	else
+		return State::ON;
+}
+
 void Application::Update() {
-	
+	for (unsigned int i = 0; i < m_ants.size(); i++) {
+		if (this->GetPixelState((sf::Vector2u)m_ants[i].GetPosition()) == State::OFF) {
+			m_ants[i].Turn(TurnDir::RIGHT);
+			m_pixelBuffer.setPixel(m_ants[i].GetPosition().x, m_ants[i].GetPosition().y, m_ants[i].GetColor());
+		}
+		else {
+			m_ants[i].Turn(TurnDir::LEFT);
+			m_pixelBuffer.setPixel(m_ants[i].GetPosition().x, m_ants[i].GetPosition().y, sf::Color::White);
+		}
+		m_ants[i].Move();
+	}
 }
 
 void Application::Render() {
@@ -35,12 +57,8 @@ void Application::Run() {
 		}
 
 		m_mainWindow.clear();
-
-		if (m_deltaTime.getElapsedTime().asMilliseconds() > 20) {
-			this->Update();
-			this->SetTexture();
-			m_deltaTime.restart();
-		}
+		this->Update();
+		this->SetTexture();
 		this->Render();
 
 		m_mainWindow.display();
